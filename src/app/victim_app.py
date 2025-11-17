@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask, request, render_template_string
-from setup_db import setup_db
+from src.app.setup_db import setup_db
 
 app = Flask(__name__)
 
