@@ -1,4 +1,3 @@
-import heapq
 import requests
 from bs4 import BeautifulSoup
 from Levenshtein import distance as levenshtein_distance
