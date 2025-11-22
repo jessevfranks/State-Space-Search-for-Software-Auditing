@@ -2,12 +2,17 @@ import requests
 from bs4 import BeautifulSoup
 from Levenshtein import distance as levenshtein_distance
 
-# determines that path cost using the combined length. This helps to optimize for less iterations
+from src.agent.State import State
+
+
+# determines that path cost using the combined length. This helps to optimize for fewer iterations
 def path_cost(username, password):
     return len(username) + len(password)
 
 # calculates the heuristic cost based on the response of GET /login and its levenshtein distance from the goal_text
-def heuristic_cost(url, username, password, goal_text):
+def heuristic_cost(username, password):
+    url = "http://localhost:5000/login"
+    goal_text = "Welcome, admin!"
     inputs = {'username': username, 'password': password}
 
     try:
@@ -25,7 +30,10 @@ def heuristic_cost(url, username, password, goal_text):
     return levenshtein_distance(goal_text, page_text)
 
 # generates mutations to get closer to an SQL injection
-def generate_mutations(username, password):
+def generate_mutations(state: State) -> list[tuple[str, str]]:
+    username = state.username
+    password = state.password
+
     # Respectively, mutations are:
     # append a quote
     # append a sql comment
