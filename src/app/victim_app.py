@@ -3,6 +3,7 @@ from flask import Flask, request, render_template_string
 from src.app.setup_db import setup_db
 
 app = Flask(__name__)
+db_setup = setup_db()
 
 # HTML templates for responses
 root_page = "<h1> Use /login to view login screen </h1>"
@@ -30,11 +31,19 @@ def login():
     if request.method == 'GET':
         return render_template_string(login_page), 200
 
-    if not setup_db():
+    if not db_setup:
         return render_template_string(internal_server_error), 500
 
-    username = request.form.get('username')
-    password = request.form.get('password')
+    username = None
+    password = None
+
+    if request.form:
+        username = request.form['username']
+        password = request.form['password']
+    elif request.json:
+        username = request.json.get('username')
+        password = request.json.get('password')
+
     conn = None
 
     try:
@@ -49,6 +58,7 @@ def login():
 
         # found a user
         if result:
+            print("Logged in successfully")
             return render_template_string(welcome_page), 200
 
         # did not find a user, but successful query
