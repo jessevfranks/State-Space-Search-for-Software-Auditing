@@ -25,7 +25,6 @@ def generate_report(goal_state, total_states_explored, start_time):
         print("===================================================")
         print("Status: VULNERABILITY NOT FOUND")
         print(f"Total States Explored: {total_states_explored}")
-
         return
 
     # Reconstruct the path
