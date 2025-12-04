@@ -36,6 +36,7 @@ def run_informed_audit(start_username, start_password):
         if curr_state.h_cost == 0:
             print(f"Achieved goal state with username: {curr_state.username} and password: {curr_state.password}")
             print(f"Found {states_found} states")
+            print(f"Path cost {curr_state.g_cost}")
             return curr_state
 
         mutations = generate_mutations(curr_state)
@@ -103,6 +104,7 @@ def run_uninformed_audit(start_username, start_password):
         if curr_state.h_cost == 0:
             print(f"Achieved goal state with username: {curr_state.username} and password: {curr_state.password}")
             print(f"Found {states_found} states")
+            print(f"Path cost {curr_state.g_cost}")
             return curr_state
 
         mutations = generate_mutations(curr_state)

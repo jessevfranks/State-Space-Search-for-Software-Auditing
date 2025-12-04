@@ -15,50 +15,60 @@ def reconstruct_path(goal_state):
     return path
 
 
-def generate_report(goal_state, start_time):
+def generate_report(informed_state, uninformed_state, informed_time, uninformed_time):
     """
-    Generates the final report.
+    Generates the final report comparing both algorithms.
     """
-    if goal_state is None:
-        print("===================================================")
-        print("Automated Audit Report")
-        print("===================================================")
-        print("Status: VULNERABILITY NOT FOUND")
+    primary_result = informed_state if informed_state else uninformed_state
+
+    if primary_result is None:
+        print("Status: VULNERABILITY NOT FOUND (Both algorithms failed/timed out)")
         return
 
-    # Reconstruct the path
-    winning_path = reconstruct_path(goal_state)
-    final_payload = winning_path[-1]  # The last step is the winning one
+    winning_path = reconstruct_path(primary_result)
+    final_payload = winning_path[-1]
 
-    print("\n" + "=" * 51)
-    print("Automated Audit Report")
-    print("=" * 51)
     print("Status: VULNERABILITY DISCOVERED")
-    print(f"Target URL: http://localhost:5000/login")  # You'll need to pass config in
+    print(f"Target URL: http://localhost:5000/login")
     print(f"Goal State: HTML contains 'Welcome, admin!'")
-
-    print("Winning Exploit Path")
+    print("-" * 60)
+    print("Winning Exploit Path:")
     print(f"  Username Input: {final_payload['user']}")
     print(f"  Password Input: {final_payload['pass']}")
 
-    print("\nSearch Statistics")
-    print(f"  Cost of Exploit g(n): {goal_state.g_cost}")
-    print(f"  Path Length (steps): {len(winning_path) - 1}")
-    print(f"  Time Elapsed: {(time.time() - start_time):.2f} seconds")
+    print("-" * 60)
+    print(f"{'PERFORMANCE COMPARISON':^60}")
+    print("-" * 60)
+    print(f"{'Metric':<25} | {'Informed (A*)':<15} | {'Uninformed (BFS)':<15}")
+    print("-" * 60)
+
+    print(f"{'Time Elapsed (s)':<25} | {informed_time:<15.4f} | {uninformed_time:<15.4f}")
+
+    inf_cost = informed_state.g_cost if informed_state else "N/A"
+    uninf_cost = uninformed_state.g_cost if uninformed_state else "N/A"
+    print(f"{'Path Cost (g)':<25} | {str(inf_cost):<15} | {str(uninf_cost):<15}")
+
+    inf_len = len(reconstruct_path(informed_state)) - 1 if informed_state else "N/A"
+    uninf_len = len(reconstruct_path(uninformed_state)) - 1 if uninformed_state else "N/A"
+    print(f"{'Path Length (steps)':<25} | {str(inf_len):<15} | {str(uninf_len):<15}")
+    print("=" * 60)
 
 
-# --- Example of how to run it all ---
-import time
 from auditor import *
 
-
 if __name__ == "__main__":
-    start_time = time.time()
     start_username = "admin"
     start_password = "password"
 
     # Run the audit
+    start_t_informed = time.time()
     final_informed_state = run_informed_audit(start_username, start_password)
-    final_uninformed_state = run_uninformed_audit(start_username, start_password) # not in report, here as a comparison
+    end_t_informed = time.time()
+    informed_duration = end_t_informed - start_t_informed
 
-    generate_report(final_informed_state, start_time=start_time)
+    start_t_uninformed = time.time()
+    final_uninformed_state = run_uninformed_audit(start_username, start_password) # not in report, here as a comparison
+    end_t_uninformed = time.time()
+    uninformed_duration = end_t_uninformed - start_t_uninformed
+
+    generate_report(final_informed_state, final_uninformed_state, informed_duration, uninformed_duration)
