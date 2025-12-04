@@ -15,7 +15,7 @@ def reconstruct_path(goal_state):
     return path
 
 
-def generate_report(goal_state, total_states_explored, start_time):
+def generate_report(goal_state, start_time):
     """
     Generates the final report.
     """
@@ -24,7 +24,6 @@ def generate_report(goal_state, total_states_explored, start_time):
         print("Automated Audit Report")
         print("===================================================")
         print("Status: VULNERABILITY NOT FOUND")
-        print(f"Total States Explored: {total_states_explored}")
         return
 
     # Reconstruct the path
@@ -43,7 +42,6 @@ def generate_report(goal_state, total_states_explored, start_time):
     print(f"  Password Input: {final_payload['pass']}")
 
     print("\nSearch Statistics")
-    print(f"  Total States Explored: {total_states_explored}")
     print(f"  Cost of Exploit g(n): {goal_state.g_cost}")
     print(f"  Path Length (steps): {len(winning_path) - 1}")
     print(f"  Time Elapsed: {(time.time() - start_time):.2f} seconds")
@@ -61,8 +59,6 @@ if __name__ == "__main__":
 
     # Run the audit
     final_informed_state = run_informed_audit(start_username, start_password)
-    #final_uninformed_state = run_uninformed_audit(start_username, start_password)
+    final_uninformed_state = run_uninformed_audit(start_username, start_password) # not in report, here as a comparison
 
-    # You'd get total_states_explored from len(closed_set),
-    # which you'd need to return from run_audit
-    generate_report(final_informed_state, total_states_explored=999, start_time=start_time)
+    generate_report(final_informed_state, start_time=start_time)

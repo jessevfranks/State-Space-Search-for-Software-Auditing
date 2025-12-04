@@ -1,8 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from Levenshtein import distance as levenshtein_distance
-
-from src.agent.State import State
+from State import State
 
 # calculates the heuristic cost based on the response of GET /login and its levenshtein distance from the goal_text
 def heuristic_cost(username, password):
