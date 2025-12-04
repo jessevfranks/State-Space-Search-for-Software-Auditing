@@ -4,8 +4,6 @@ def setup_db():
     conn = None
     try:
         conn = sqlite3.connect('users.db')
-        c = conn.cursor()
-        conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
 
         # Create user table
