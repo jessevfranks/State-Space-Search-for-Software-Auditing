@@ -11,7 +11,7 @@
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/jessevfranks/State-Space-Search-for-Software-Auditing](https://github.com/jessevfranks/State-Space-Search-for-Software-Auditing)
+   git clone https://github.com/jessevfranks/State-Space-Search-for-Software-Auditing
    ```
    
 2. **Install required packages::**
