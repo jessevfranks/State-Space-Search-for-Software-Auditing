@@ -1,5 +1,5 @@
 Dependencies:
-python 3.x
+python 3.14
 flask
 requests
 beautifulsoup4
